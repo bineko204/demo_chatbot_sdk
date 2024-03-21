@@ -2,22 +2,15 @@ import 'package:flutter/material.dart';
 
 class Expand extends StatefulWidget {
   Function onTap;
+  dynamic data;
 
-  Expand({Key? key, required this.onTap}) : super(key: key);
+  Expand({Key? key, required this.onTap, required this.data}) : super(key: key);
 
   @override
-  State<Expand> createState() => ExpandState();
+  State<Expand> createState() => _ExpandState();
 }
 
-class ExpandState extends State<Expand> {
-  String data = "";
-
-  setData(d) {
-    setState(() {
-      data = d;
-    });
-  }
-
+class _ExpandState extends State<Expand> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -48,7 +41,7 @@ class ExpandState extends State<Expand> {
             margin: const EdgeInsets.only(top: 20),
             color: Colors.white,
             child: Text(
-              data.toString(),
+              widget.data.toString(),
               style: const TextStyle(color: Colors.black),
             ),
           ))

@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
 
 class MainApp extends StatefulWidget {
   const MainApp({Key? key}) : super(key: key);
+
   @override
   State<MainApp> createState() => _MainAppState();
 }
@@ -32,24 +33,19 @@ class _MainAppState extends State<MainApp> {
   dynamic data;
   StreamController streamController = StreamController();
   final methodChannel = const MethodChannel("flutter_method_channel");
-  final expandKey = GlobalKey<ExpandState>();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // streamController.stream.listen((event) {
-    //   print(event);
+    getUserData();
+  }
 
-    // });
-    methodChannel.setMethodCallHandler((call) async {
-      if (call.method == "buttonClick") {
-        final res = call.arguments;
-        final jData = await jsonDecode(res);
-        expandKey.currentState!.setData("kklasdjfa");
-        // setState(() {
-        //   data = jData["amount"];
-        // });
-      }
+  getUserData() async {
+    final res = await methodChannel.invokeMethod("init");
+    print(res);
+    setState(() {
+      data = res;
     });
   }
 
@@ -60,12 +56,13 @@ class _MainAppState extends State<MainApp> {
       children: [
         if (isExpand)
           Expand(
-              key: expandKey,
-              onTap: () {
-            setState(() {
-              isExpand = false;
-            });
-          })
+              data: data,
+              onTap: () async {
+                setState(() {
+                  isExpand = false;
+                  // data = '123123';
+                });
+              })
         else
           Collapse(
             onTap: () {
